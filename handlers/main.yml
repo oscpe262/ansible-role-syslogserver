@@ -1,0 +1,13 @@
+## roles/ansible-role-syslogserver/handlers/main.yml
+# vim:ft=yaml.ansible:
+---
+- name: restart rsyslog
+  service:
+    name: '{{ syslogserverService }}'
+    state: restarted
+    enabled: yes
+
+- name: reload ufw
+  ufw:
+    state: reloaded
+...

@@ -1,0 +1,15 @@
+## roles/ansible-role-syslogserver/defaults/main.yml
+# vim:ft=yaml.ansible:
+---
+syslogserverPackages: ["rsyslog"]
+syslogserverService: rsyslog
+syslogserverListenPort: 514
+syslogserverRemoteLogsBasePath: /var/log
+syslogserverUDP: false
+
+####################################################################
+# The following variables are dependencies on other variables.
+# Changing these will break functionality.
+syslogserverProtocol: tcp
+####################################################################
+...

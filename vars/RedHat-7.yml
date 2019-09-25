@@ -1,0 +1,7 @@
+## roles/ansible-role-syslogserver/vars/RedHat-7.yml
+# vim:ft=yaml.ansible:
+---
+syslogserverPackages:
+  - "rsyslog"
+  - "policycoreutils-python"
+...

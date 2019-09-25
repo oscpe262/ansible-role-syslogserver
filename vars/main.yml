@@ -1,0 +1,4 @@
+## roles/ansible-role-syslogserver/vars/main.yml
+# vim:ft=yaml.ansible:
+---
+...

@@ -1,0 +1,63 @@
+## roles/ansible-role-syslogserver/tasks/main.yml
+# vim:ft=yaml.ansible:
+---
+- name: Include OS-specific variables
+  include_vars: '{{ item }}'
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- name: Install rsyslog
+  package:
+    name: '{{ item }}'
+    state: present
+  with_items: '{{ syslogserverPackages }}'
+  notify: restart rsyslog
+
+- name: Configure rsyslog
+  template:
+    src: etc_rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+    # -rw-r--r--. root root system_u:object_r:syslog_conf_t:s0
+    mode: 600
+    owner: root
+    group: root
+    seuser: system_u
+    serole: object_r
+    setype: syslog_conf_t
+    backup: yes
+  notify: restart rsyslog
+
+- name: Set local variable 'syslogserverProtocol if using UDP'
+  set_fact:
+    syslogserverProtocol: udp
+  when: syslogserverUDP
+
+- name: Allow rsyslog traffic in SELinux
+  seport:
+    ports: '{{ syslogserverListenPort }}'
+    proto: '{{ syslogserverProtocol }}'
+    setype: syslogd_port_t
+    state: present
+  when: ansible_selinux.status == 'enabled'
+
+- name: Open port in firewall (Firewalld)
+  firewalld:
+    port: '{{ syslogserverListenPort }}/{{ syslogserverProtocol }}'
+    permanent: yes
+    state: enabled
+    immediate: yes
+  when: "'RedHat' in ansible_os_family"
+
+- name: Open port in firewall (UFW)
+  ufw:
+    rule: allow
+    port: '{{ syslogserverListenPort }}'
+    proto: '{{ syslogserverProtocol }}'
+    comment: Allow syslog
+  notify: reload ufw
+  when: "'Debian' in ansible_os_family"
+...
