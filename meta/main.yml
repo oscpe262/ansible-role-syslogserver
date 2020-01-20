@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: syslogserver
   author: Oscar Petersson
   description: A role for setting up a basic central syslog server.
 
