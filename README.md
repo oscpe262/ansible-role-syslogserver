@@ -28,7 +28,7 @@ This role should work for Debian- and RedHat-family distributions. Testing has o
 
 ## License
 
-BSD
+MIT
 
 ## Contributors
 
