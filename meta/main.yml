@@ -33,6 +33,9 @@ galaxy_info:
     - syslog
     - logserver
     - rsyslog
+    - system
+    - monitoring
+    - security
 
 dependencies: []
 allow_duplicates: no
