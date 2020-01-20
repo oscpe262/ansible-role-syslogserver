@@ -21,8 +21,7 @@
   template:
     src: etc_rsyslog.conf.j2
     dest: /etc/rsyslog.conf
-    # -rw-r--r--. root root system_u:object_r:syslog_conf_t:s0
-    mode: 600
+    mode: 0600
     owner: root
     group: root
     seuser: system_u
